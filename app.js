@@ -3,7 +3,8 @@ const app = express();
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-require('dotenv/config'); // to store connection strings etc
+const dotenv = require("dotenv");
+dotenv.config(); // to store connection strings etc
 
 //Middlewares
 app.use(cors());
@@ -36,6 +37,9 @@ app.listen(3000);
 //connect to DB - take the string from node.js driver - add password and change the db name in string
 mongoose.connect(
 process.env.DB_CONNECTION,
-{useUnifiedTopology: true, useNewUrlParser:true},
-()=>console.log('Connected to DB!')
-);
+{useUnifiedTopology: true, useNewUrlParser:true});
+mongoose.connection.once('open', function(){
+    console.log('Conection has been made!');
+  }).on('error', function(error){
+      console.log('Error is: ', error);
+  });
